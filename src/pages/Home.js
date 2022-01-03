@@ -1,6 +1,6 @@
 import PropTypes from 'prop-types';
 import styles from '../styles/home.module.css';
-import Comment from './Comment';
+import Comment from '../components/Comment';
 
 const Home = ({ posts }) => {
 	return (
@@ -42,7 +42,9 @@ const Home = ({ posts }) => {
       	    </div>
 
     				<div className={styles.postCommentsList}>
-							<Comment />
+							{post.comments.map((comment) => (
+								<Comment comment={comment}/>
+							))}
 						</div>
 
       	  </div>

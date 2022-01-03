@@ -21,7 +21,7 @@ const customFetch = async (url, { body, ...custonConfig }) => {
 	}
 
 	if (body) {
-		config.body =  JSON.stringify(body);
+		config.body = JSON.stringify(body);
 	}
 
 	try {
