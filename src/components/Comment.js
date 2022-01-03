@@ -1,7 +1,7 @@
 import PropTypes from 'prop-types';
 import styles from '../styles/home.module.css';
 
-const Comment = ( { comment } ) => {
+const Comment = ({ comment }) => {
 	return (
       <div className={styles.postCommentsItem}>
         <div className={styles.postCommentHeader}>
