@@ -1,8 +1,8 @@
 import { useEffect, useState } from "react";
 import { getPosts } from '../api'
-import PropTypes from 'prop-types';
 import styles from '../styles/home.module.css';
 import Comment from '../components/Comment';
+import { Loader } from "../components";
 
 const Home = () => {
 	const [posts, setPosts] = useState([]);
@@ -22,6 +22,10 @@ const Home = () => {
 
 		fetchPosts();
 	}, []);
+
+	if (loading) {
+		return <Loader />;
+	}
 
 	return (
 		<div className={styles.postsList}>
@@ -72,10 +76,6 @@ const Home = () => {
 			))}
     </div>
 	);
-}
-
-Home.propTypes = {
-	posts: PropTypes.array.isRequired,
 }
 
 export default Home;

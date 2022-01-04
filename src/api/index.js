@@ -59,37 +59,9 @@ export const login = (email, password) => {
 	});
 };
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+export const register = (name, email, password, confirmPassword) => {
+	return customFetch(API_URLS.signup(), {
+		method: 'POST',
+		body: { name, email, password, confirmPassword },
+	});
+}
