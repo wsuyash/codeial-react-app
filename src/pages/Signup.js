@@ -14,8 +14,7 @@ const Signup = () => {
 	const [signingUp, setSigningUp] = useState(false);
 	const { addToast } = useToasts();
 	const auth = useAuth();
-	const history = useNavigate();
-	console.log(history);
+	const navigate = useNavigate();
 
 	const handleFormSubmit = async (e) => {
 		e.preventDefault();
@@ -48,10 +47,10 @@ const Signup = () => {
 		const response = await auth.signup(name, email, password, confirmPassword);
 
 		if (response.success) {
-			history.push('/login');
+			navigate('/login');
 			setSigningUp(false);
 
-			addToast('User registered successfully, please login now.', {
+			return addToast('User registered successfully, please login now.', {
 				appearance: 'success',
 				autoDismiss: true,
 			});
