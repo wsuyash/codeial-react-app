@@ -1,6 +1,6 @@
 import { useToasts } from 'react-toast-notifications';
 import { useState } from 'react/cjs/react.development';
-import { createComment } from '../api';
+import { createComment, toggleLike } from '../api';
 import { useProvidePosts } from '../hooks';
 import styles from '../styles/home.module.css';
 import { Link } from 'react-router-dom';
@@ -36,6 +36,26 @@ const Post = (post) => {
 		setCreatingComment(false);
 	}
 
+	const handlePostLikeClick = async () => {
+		const response = await toggleLike(post.props._id, 'Post');
+
+		if (response.success) {
+			if (response.data.deleted) {
+				addToast('Like removed.', {
+					appearance: 'success',
+				});
+			} else {
+				addToast('Like added.', {
+					appearance: 'success',
+				});
+			}
+		} else {
+			addToast(response.message, {
+				appearance: 'error',
+			});
+		}
+	}
+
 	return (
   	<div className={styles.postWrapper} key={post.props._id}>
   	  <div className={styles.postHeader}>
@@ -63,10 +83,12 @@ const Post = (post) => {
 
   	    <div className={styles.postActions}>
   	      <div className={styles.postLike}>
-  	        <img
-  	          src="https://cdn-icons.flaticon.com/png/512/880/premium/880452.png?token=exp=1641224085~hmac=15edf68d1059259a5dd87fd62367a738"
-  	          alt="likes-icon"
-  	        />
+						<button onClick={handlePostLikeClick}>
+	  	        <img
+	  	          src="https://cdn-icons.flaticon.com/png/512/880/premium/880452.png?token=exp=1641224085~hmac=15edf68d1059259a5dd87fd62367a738"
+	  	          alt="likes-icon"
+	  	        />
+						</button>
   	        <span>{post.props.likes.length}</span>
   	      </div>
 
