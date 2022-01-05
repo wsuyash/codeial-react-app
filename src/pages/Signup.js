@@ -1,6 +1,6 @@
 import { useToasts } from "react-toast-notifications";
 import { useState } from "react/cjs/react.development";
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, Navigate, Route} from 'react-router-dom';
 import { useAuth } from '../hooks'
 
 import styles from '../styles/login.module.css';
@@ -63,6 +63,10 @@ const Signup = () => {
 		setSigningUp(false);
 		}
 
+	}
+
+	if (auth.user) {
+		return <Route path="*" element={<Navigate to="/" replace />} />
 	}
 
 	return (
