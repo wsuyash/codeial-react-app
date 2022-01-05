@@ -1,6 +1,7 @@
 import styles from '../styles/settings.module.css';
 import { useAuth } from '../hooks'
 import { useState } from 'react/cjs/react.development';
+import { useToasts } from 'react-toast-notifications';
 
 const Settings = () => {
 	const auth = useAuth();
@@ -9,8 +10,54 @@ const Settings = () => {
 	const [password, setPassword] = useState("");
 	const [confirmPassword, setConfirmPassword] = useState("");
 	const [savingForm, setSavingForm] = useState(false);
+	const { addToast } = useToasts();
 
-	const updateProfile = () => {
+	const clearForm = () => {
+		setPassword('');
+		setConfirmPassword('');
+	}
+
+	const updateProfile = async () => {
+		setSavingForm(true);
+
+		let error = false;
+		
+		if (!name || !password || !confirmPassword) {
+			addToast('Please fill all the fields', {
+				appearance: 'error'
+			});
+
+			error = true;
+		}
+
+		if (password !== confirmPassword) {
+			addToast('Password and Confirm Password do not match.', {
+				appearance: 'error'
+			});
+
+			error = true;
+		}
+
+		if (error) {
+			return setSavingForm(false);
+		}
+
+		const response = await auth.updateUser(auth.user._id, name, password, confirmPassword);
+
+		if (response.success) {
+			setEditMode(false);
+			setSavingForm(false);
+			clearForm();
+
+			return addToast('User updated!', {
+				appearance: 'success'
+			});
+		} else {
+			return addToast(response.message, {
+				appearance: 'error'
+			});
+		}
+
 	}
 
 	return (
@@ -68,7 +115,9 @@ const Settings = () => {
 					<>
 						<button 
 							className={`button ${styles.editBtn}`}
-							onClick={updateProfile}	>
+							onClick={updateProfile}	
+							disabled={savingForm}	
+						>
 							{savingForm ? 'Saving profile...' : 'Save Profile'}
 						</button>
 						<button className={`button ${styles.editBtn}`} onClick={() => setEditMode(false)}>Go back</button>
