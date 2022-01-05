@@ -2,7 +2,7 @@ import { useContext, useEffect, useState } from "react";
 import jwtDecode from "jwt-decode";
 
 import { AuthContext } from "../providers/AuthProvider";
-import { editProfile, login as userLogin, register} from '../api';
+import { editProfile, fetchUserFriends, login as userLogin, register} from '../api';
 import { LOCALSTORAGE_TOKEN_KEY, removeItemFromLocalStorage, setItemInLocalStorage, getItemFromLocalStorage } from "../utils";
 
 export const useAuth = () => {
@@ -14,15 +14,30 @@ export const useProvideAuth = () => {
 	const [loading, setLoading] = useState(true);
 
 	useEffect(() => {
-		const userToken = getItemFromLocalStorage(LOCALSTORAGE_TOKEN_KEY);
+		const getUser = async () => {
+			const userToken = getItemFromLocalStorage(LOCALSTORAGE_TOKEN_KEY);
 
-		if (userToken) {
-			const user = jwtDecode(userToken);
+			if (userToken) {
+				const user = jwtDecode(userToken);
 
-			setUser(user);
+				const response = await fetchUserFriends();
+
+				let friends = [];
+				if (response.success) {
+					friends = response.data.friends;
+				}
+
+				setUser({
+					...user,
+					friends,
+				});
+			}
+
+			setLoading(false);
+
 		}
 
-		setLoading(false);
+		getUser();
 	}, []);
 
 	const updateUser = async (userId, name, password, confirmPassword) => {
