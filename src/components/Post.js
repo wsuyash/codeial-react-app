@@ -1,17 +1,16 @@
-import PropTypes from 'prop-types';
 import { useToasts } from 'react-toast-notifications';
 import { useState } from 'react/cjs/react.development';
 import { createComment } from '../api';
-import { usePosts } from '../hooks';
+import { useProvidePosts } from '../hooks';
 import styles from '../styles/home.module.css';
 import { Link } from 'react-router-dom';
 import { Comment } from './'
 
-const Post = ({ post }) => {
+const Post = (post) => {
 	const [comment, setComment] = useState('');
 	const [creatingComment, setCreatingComment] = useState(false);
 
-	const posts = usePosts();
+	const posts = useProvidePosts();
 
 	const { addToast } = useToasts(); 
 
@@ -38,7 +37,7 @@ const Post = ({ post }) => {
 	}
 
 	return (
-  	<div className={styles.postWrapper} key={post._id}>
+  	<div className={styles.postWrapper} key={post.props._id}>
   	  <div className={styles.postHeader}>
   	    <div className={styles.postAvatar}>
   	      <img
@@ -48,19 +47,19 @@ const Post = ({ post }) => {
   	      <div>
   	        <Link
 							to={{
-								pathname: `/user/${post.user._id}`,
+								pathname: `/user/${post.props.user._id}`,
 								state: {
-									user: post.user,
+									user: post.props.user,
 								}
 							}}
 							className={styles.postAuthor}
 						>
-					{post.user.name}
+					{post.props.user.name}
 				</Link>
-  	        <span className={styles.postTime}>a minute ago</span>
+  	        <span className={styles.postTime}>{post.props.createdAt.toString()}</span>
   	      </div>
   	    </div>
-  	    <div className={styles.postContent}>{post.content}</div>
+  	    <div className={styles.postContent}>{post.props.content}</div>
 
   	    <div className={styles.postActions}>
   	      <div className={styles.postLike}>
@@ -68,7 +67,7 @@ const Post = ({ post }) => {
   	          src="https://cdn-icons.flaticon.com/png/512/880/premium/880452.png?token=exp=1641224085~hmac=15edf68d1059259a5dd87fd62367a738"
   	          alt="likes-icon"
   	        />
-  	        <span>{post.likes.length}</span>
+  	        <span>{post.props.likes.length}</span>
   	      </div>
 
   	      <div className={styles.postCommentsIcon}>
@@ -76,7 +75,7 @@ const Post = ({ post }) => {
   	          src="https://cdn-icons.flaticon.com/png/512/2593/premium/2593491.png?token=exp=1641224123~hmac=07689a5c10e8e37a11c09c44e0861d21"
   	          alt="comments-icon"
   	        />
-  	        <span>{post.comments.length}</span>
+  	        <span>{post.props.comments.length}</span>
   	      </div>
   	    </div>
   	    <div className={styles.postCommentBox}>
@@ -89,7 +88,7 @@ const Post = ({ post }) => {
   	    </div>
 
   			<div className={styles.postCommentsList}>
-					{post.comments.map((comment) => (
+					{post.props.comments.map((comment) => (
 						<Comment comment={comment} key={`post-comment-${comment._id}`}/>
 					))}
 				</div>
@@ -97,9 +96,5 @@ const Post = ({ post }) => {
   	</div>
 	);
 }
-
-// Post.propTypes = {
-// 	post: PropTypes.object.isRequired
-// }
 
 export default Post;
