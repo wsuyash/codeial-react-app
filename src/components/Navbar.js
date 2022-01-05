@@ -1,5 +1,7 @@
+import { useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { useState } from 'react/cjs/react.development';
+import { fetchUserFriends, searchUsers } from '../api';
 import { useAuth } from '../hooks';
 import styles from '../styles/navbar.module.css';
 
@@ -7,6 +9,22 @@ const Navbar = () => {
 	const [results, setResults] = useState([]);
 	const [searchText, setSearchText] = useState('');
 	const auth = useAuth();
+
+	useEffect(() => {
+		const fetchUsers = async () => {
+			const response = await searchUsers();
+
+			if (response.success) {
+				setResults(response.data.users);
+			}
+		};
+
+		if (searchText.length > 2) {
+			fetchUsers();
+		} else {
+			setResults([]);
+		}
+	}, [searchText]);
 
 	return (
 		<div className={styles.nav}>
@@ -21,7 +39,7 @@ const Navbar = () => {
 				<img 
 					src='https://cdn-icons.flaticon.com/png/512/3031/premium/3031293.png?token=exp=1641421231~hmac=83c1d8680ce1ba5ac0e6b9548512b195' 
 					alt='search'
-					className={styles.userDp}
+					className={styles.searchIcon}
 				/>
 
 				<input

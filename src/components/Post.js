@@ -83,7 +83,10 @@ const Post = (post) => {
 
   	    <div className={styles.postActions}>
   	      <div className={styles.postLike}>
-						<button onClick={handlePostLikeClick}>
+						<button
+							onClick={handlePostLikeClick}
+							style={{ border: 'none', background: 'transparent' }}
+						>
 	  	        <img
 	  	          src="https://cdn-icons.flaticon.com/png/512/880/premium/880452.png?token=exp=1641224085~hmac=15edf68d1059259a5dd87fd62367a738"
 	  	          alt="likes-icon"
