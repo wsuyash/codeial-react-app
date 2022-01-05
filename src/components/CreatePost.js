@@ -2,11 +2,13 @@ import { useState } from 'react/cjs/react.development';
 import styles from '../styles/home.module.css';
 import { addPost } from '../api';
 import { useToasts } from 'react-toast-notifications';
+import { usePosts } from '../hooks'
 
 const CreatePost = () => {
 	const [post, setPost] = useState('');
 	const [addingPost, setAddingPost] = useState(false);
 	const { addToast } = useToasts();
+	const posts = usePosts();
 
 	const handleAddPostClick = async () => {
 		setAddingPost(true);
@@ -16,6 +18,7 @@ const CreatePost = () => {
 
 		if (response.success) {
 			setPost('');
+			posts.addPostToState(response.data.post);
 			addToast('Post created!', {
 				appearance: 'success',
 			});
