@@ -2,7 +2,7 @@ import { useState } from 'react/cjs/react.development';
 import styles from '../styles/settings.module.css';
 import { useParams, useNavigate } from 'react-router-dom';
 import { useEffect } from 'react';
-import { addFriend, fetchUserProfile } from '../api';
+import { addFriend, fetchUserProfile, removeFriend } from '../api';
 import { useToasts } from 'react-toast-notifications';
 import { Loader } from '../components';
 import { useAuth } from '../hooks';
@@ -52,8 +52,26 @@ const UserProfile = () => {
 		return false;
 	}
 
-	// TODO remove friend
-	const handleRemoveFriendClick = () => {
+	const handleRemoveFriendClick = async () => {
+		setRequestInProgress(true);
+
+		const response = await removeFriend();
+
+		if (response.success) {
+			const friendship = auth.user.friends.filter(friend => friend.to_user._id === userId);
+
+			auth.updateUserFriends(false, friendship[0]);
+
+			addToast('Friend removed.', {
+				appearance: 'success'
+			});
+		} else {
+			addToast(response.message, {
+				appearance: 'error'
+			});
+		}
+
+		setRequestInProgress(false);
 	}
 
 	const handleAddFriendClick = async () => {
