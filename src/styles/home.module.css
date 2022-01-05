@@ -26,6 +26,7 @@
   font-weight: 600;
   font-size: 16px;
   line-height: 22px;
+	text-decoration: none;
 }
 .postAvatar .postTime {
   /* font-family: Open Sans; */
@@ -34,6 +35,9 @@
   font-size: 14px;
   line-height: 19px;
   color: #9e9e9e;
+}
+.postAvatar .postAuthor:hover {
+	text-decoration: underline;
 }
 .postContent {
   /* font-family: Open Sans; */
